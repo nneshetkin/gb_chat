@@ -96,5 +96,19 @@ public class Network {
 
         System.exit(1);
     }
+    //asd
+    public void logout() throws IOException {
+        try {
+            outputStream.writeUTF(ServerCommandConstants.EXIT);
+            outputStream.close();
+            inputStream.close();
+            socket.close();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+          initializeNetwork();
+
+    }
+
 
 }

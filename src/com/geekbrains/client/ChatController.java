@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -19,7 +20,7 @@ public class ChatController implements Initializable {
     @FXML
     private TextField messageField, loginField;
     @FXML
-    private HBox messagePanel, authPanel;
+    private HBox messagePanel, authPanel, actionPanel;
     @FXML
     private PasswordField passwordField;
     @FXML
@@ -38,6 +39,8 @@ public class ChatController implements Initializable {
         messagePanel.setManaged(authenticated);
         clientList.setVisible(authenticated);
         clientList.setManaged(authenticated);
+        actionPanel.setVisible(authenticated);
+        actionPanel.setManaged(authenticated);
     }
 
     @Override
@@ -89,4 +92,10 @@ public class ChatController implements Initializable {
     public void close() {
         network.closeConnection();
     }
+//HW2++
+    public void logout(ActionEvent event) throws IOException {
+        network.logout();
+        setAuthenticated(false);
+    }
+//HW2--
 }

@@ -3,6 +3,7 @@ package com.geekbrains.server;
 import com.geekbrains.CommonConstants;
 import com.geekbrains.server.authorization.AuthService;
 import com.geekbrains.server.authorization.InMemoryAuthServiceImpl;
+import com.geekbrains.server.authorization.JdbcApp;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,9 +16,9 @@ public class Server {
 
     private List<ClientHandler> connectedUsers;
 
-    public Server() {
+    public Server()  {
         authService = new InMemoryAuthServiceImpl();
-        try (ServerSocket server = new ServerSocket(CommonConstants.SERVER_PORT)) {
+        try (ServerSocket server = new ServerSocket(CommonConstants.SERVER_PORT);) {
             authService.start();
             connectedUsers = new ArrayList<>();
             while (true) {
