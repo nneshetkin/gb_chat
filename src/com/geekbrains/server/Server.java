@@ -8,6 +8,7 @@ import com.geekbrains.server.authorization.JdbcApp;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,8 @@ public class Server {
     private List<ClientHandler> connectedUsers;
 
     public Server()  {
+        System.out.println("Соединение с БД....");
+        JdbcApp.connect();
         authService = new InMemoryAuthServiceImpl();
         try (ServerSocket server = new ServerSocket(CommonConstants.SERVER_PORT);) {
             authService.start();
@@ -33,6 +36,7 @@ public class Server {
         } finally {
             if (authService != null) {
                 authService.end();
+                JdbcApp.disconnect();
             }
         }
     }

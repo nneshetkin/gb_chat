@@ -5,9 +5,17 @@ public class JdbcApp {
     private static Connection connection;
     private static Statement stmt;
 
-    public static void connect() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:sqlite:users.db");
-        stmt = connection.createStatement();
+    public static void connect()  {
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:users.db");
+            stmt = connection.createStatement();
+            System.out.println("Соединение с БД установлено");
+        } catch (SQLException throwables) {
+            System.out.println("Ошибка соединения с БД");
+            throwables.printStackTrace();
+        }
+
+
     }
     public static void disconnect() {
         try {

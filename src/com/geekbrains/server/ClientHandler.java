@@ -52,9 +52,9 @@ public class ClientHandler {
                 if (CommonConstants.INNER_AUTH){
                 String nickName = server.getAuthService().getNickNameByLoginAndPassword(authInfo[1], authInfo[2]);}
                 else {
-                    JdbcApp.connect();
                     nickName= JdbcApp.auth(authInfo[1], authInfo[2]);
-                    JdbcApp.disconnect();}
+            //        JdbcApp.disconnect()
+                            ;}
            //HW2-
                 if (nickName != null) {
                     if (!server.isNickNameBusy(nickName)) {
