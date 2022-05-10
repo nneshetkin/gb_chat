@@ -1,9 +1,13 @@
 package com.geekbrains.server;
 
+import com.geekbrains.CommonConstants;
+import com.geekbrains.server.authorization.JdbcApp;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
 
 public class ClientHandler {
     private final Server server;
@@ -29,7 +33,7 @@ public class ClientHandler {
                     try {
                         authentication();
                         readMessages();
-                    } catch (IOException exception) {
+                    } catch (IOException | SQLException exception) {
                         exception.printStackTrace();
                     }
                 }
@@ -39,12 +43,19 @@ public class ClientHandler {
         }
     }
 
-    public void authentication() throws IOException {
+    public void authentication() throws IOException, SQLException {
         while (true) {
             String message = inputStream.readUTF();
             if (message.startsWith(ServerCommandConstants.AUTHENTICATION)) {
                 String[] authInfo = message.split(" ");
-                String nickName = server.getAuthService().getNickNameByLoginAndPassword(authInfo[1], authInfo[2]);
+           //HW2+
+                if (CommonConstants.INNER_AUTH){
+                String nickName = server.getAuthService().getNickNameByLoginAndPassword(authInfo[1], authInfo[2]);}
+                else {
+                    nickName= JdbcApp.auth(authInfo[1], authInfo[2]);
+            //        JdbcApp.disconnect()
+                            ;}
+           //HW2-
                 if (nickName != null) {
                     if (!server.isNickNameBusy(nickName)) {
                         sendAuthenticationMessage(true);

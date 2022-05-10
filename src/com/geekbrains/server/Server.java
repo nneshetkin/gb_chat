@@ -3,10 +3,12 @@ package com.geekbrains.server;
 import com.geekbrains.CommonConstants;
 import com.geekbrains.server.authorization.AuthService;
 import com.geekbrains.server.authorization.InMemoryAuthServiceImpl;
+import com.geekbrains.server.authorization.JdbcApp;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +17,11 @@ public class Server {
 
     private List<ClientHandler> connectedUsers;
 
-    public Server() {
+    public Server()  {
+        System.out.println("Соединение с БД....");
+        JdbcApp.connect();
         authService = new InMemoryAuthServiceImpl();
-        try (ServerSocket server = new ServerSocket(CommonConstants.SERVER_PORT)) {
+        try (ServerSocket server = new ServerSocket(CommonConstants.SERVER_PORT);) {
             authService.start();
             connectedUsers = new ArrayList<>();
             while (true) {
@@ -32,6 +36,7 @@ public class Server {
         } finally {
             if (authService != null) {
                 authService.end();
+                JdbcApp.disconnect();
             }
         }
     }
